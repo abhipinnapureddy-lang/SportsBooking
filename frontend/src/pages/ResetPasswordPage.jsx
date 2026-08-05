@@ -1,0 +1,12 @@
+import { useState } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
+import AuthPageLayout from '../components/auth/AuthPageLayout.jsx';
+
+function ResetPasswordPage() {
+  const [searchParams] = useSearchParams(); const token = searchParams.get('token'); const [password, setPassword] = useState(''); const [confirmPassword, setConfirmPassword] = useState(''); const [loading, setLoading] = useState(false); const [message, setMessage] = useState(''); const [error, setError] = useState('');
+  const handleSubmit = async (event) => { event.preventDefault(); setError(''); setMessage(''); if (!token) return setError('Invalid reset token.'); if (password.length < 6) return setError('Password must be at least 6 characters long.'); if (password !== confirmPassword) return setError('Passwords do not match.'); setLoading(true); try { const response = await fetch('/api/auth/reset-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token, password }) }); const result = await response.json(); result.status === 'success' ? setMessage(result.message || 'Your password has been reset successfully.') : setError(result.message || 'Unable to reset password.'); } catch { setError('Unable to connect to server. Please try again.'); } finally { setLoading(false); } };
+  return <AuthPageLayout eyebrow="Secure account" title="Choose a new password" description="Set a strong password to secure your campus account." visualTitle="Back to your best game." footer={<>Remembered it? <Link to="/login">Sign in</Link></>}>
+    {message && <div className="alert auth-success">{message}</div>}{error && <div className="alert">{error}</div>}<form onSubmit={handleSubmit} className="login-form"><label htmlFor="reset-password">New password<input id="reset-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="At least 6 characters" required autoComplete="new-password" /></label><label htmlFor="reset-confirm-password">Confirm new password<input id="reset-confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Repeat your new password" required autoComplete="new-password" /></label><button type="submit" className="button login-submit" disabled={loading}>{loading ? 'Resetting password…' : 'Reset password'}</button></form>
+  </AuthPageLayout>;
+}
+export default ResetPasswordPage;

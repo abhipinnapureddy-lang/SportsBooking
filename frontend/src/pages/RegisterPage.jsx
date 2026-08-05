@@ -1,0 +1,14 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { registerUser } from '../api.js';
+import AuthPageLayout from '../components/auth/AuthPageLayout.jsx';
+
+function RegisterPage() {
+  const [name, setName] = useState(''); const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [phone, setPhone] = useState(''); const [error, setError] = useState(''); const [message, setMessage] = useState(''); const [loading, setLoading] = useState(false);
+  const handleSubmit = async (event) => { event.preventDefault(); setError(''); setMessage(''); if (!name.trim() || !email.trim() || !password) return setError('Please fill in your name, email, and password.'); if (password.length < 6) return setError('Password must be at least 6 characters long.'); setLoading(true); try { const result = await registerUser({ name: name.trim(), email: email.trim(), password, phone: phone.trim() }); if (result.status !== 'success') return setError(result.message || 'Registration failed'); setMessage(result.message || 'Account created. Check your email for verification instructions.'); setName(''); setEmail(''); setPassword(''); setPhone(''); } catch { setError('Unable to connect to server. Please try again.'); } finally { setLoading(false); } };
+  return <AuthPageLayout eyebrow="Create student account" title="Join the game" description="Create your free campus sports account in a few steps." visualTitle="Your campus. Your sport." footer={<>Already registered? <Link to="/login">Sign in</Link></>}>
+    {message && <div className="alert auth-success">{message}</div>}{error && <div className="alert">{error}</div>}
+    <form onSubmit={handleSubmit} className="login-form"><label htmlFor="register-name">Full name<input id="register-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name" required autoComplete="name" /></label><label htmlFor="register-email">Campus email<input id="register-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="student@campus.edu" required autoComplete="email" /></label><label htmlFor="register-password">Password<input id="register-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="At least 6 characters" required autoComplete="new-password" /></label><label htmlFor="register-phone">Phone number <span className="optional-label">Optional</span><input id="register-phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Your contact number" autoComplete="tel" /></label><button type="submit" className="button login-submit" disabled={loading}>{loading ? 'Creating account…' : 'Create free account'}</button></form>
+  </AuthPageLayout>;
+}
+export default RegisterPage;
