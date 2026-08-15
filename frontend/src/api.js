@@ -1,6 +1,5 @@
 const API_BASE = '/api';
 const jsonHeaders = (token) => ({ 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) });
-
 export const loginUser = async ({ email, password }) => (await fetch(`${API_BASE}/auth/login`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ email, password }) })).json();
 export const registerUser = async ({ name, email, password, phone }) => (await fetch(`${API_BASE}/auth/register`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ name, email, password, phone }) })).json();
 export const fetchVenues = async (search) => { const p = new URLSearchParams(); if (search) p.set('search', search); return (await fetch(`${API_BASE}/venues?${p}`)).json(); };
@@ -45,3 +44,4 @@ export const createTournament = async (token, payload) => (await fetch(`${API_BA
 export const registerTournamentTeam = async (token, id, payload) => (await fetch(`${API_BASE}/tournaments/${id}/teams`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
 export const createTournamentMatch = async (token, id, payload) => (await fetch(`${API_BASE}/tournaments/${id}/matches`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
 export const updateTournamentMatch = async (token, id, matchId, payload) => (await fetch(`${API_BASE}/tournaments/${id}/matches/${matchId}`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
+export const issueTournamentCertificate = async (token, id, payload) => (await fetch(`${API_BASE}/tournaments/${id}/certificates`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
