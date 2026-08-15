@@ -28,6 +28,7 @@ initializeDb()
         const settingsRoutes = require("./routes/settingsRoutes");
         const groundRoutes = require("./routes/groundRoutes");
         const slotRoutes = require("./routes/slotRoutes");
+        const timetableRoutes = require("./routes/timetableRoutes");
         const inventoryRoutes = require("./routes/inventoryRoutes");
         const sportsRoutes = require("./routes/sportsRoutes");
         const studentsRoutes = require("./routes/studentsRoutes");
@@ -42,6 +43,7 @@ initializeDb()
         app.use("/api/settings", settingsRoutes);
         app.use("/api/grounds", groundRoutes);
         app.use("/api/slots", slotRoutes);
+        app.use("/api/timetable", timetableRoutes);
         app.use("/api/inventory", inventoryRoutes);
         app.use("/api/sports", sportsRoutes);
         app.use("/api/students", studentsRoutes);

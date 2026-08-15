@@ -7,4 +7,15 @@ const parseDate = (value) => {
     return Number.isNaN(date.getTime()) ? null : date;
 };
 
-module.exports = { generateBookingReference, parseDate };
+const getDayOfWeekName = (value) => {
+    const date = typeof value === 'string' ? new Date(value) : value;
+    const dayIndex = date.getDay();
+    const names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return names[dayIndex] || 'Monday';
+};
+
+const isTimeRangeOverlap = (aStart, aEnd, bStart, bEnd) => {
+    return aStart < bEnd && bStart < aEnd;
+};
+
+module.exports = { generateBookingReference, parseDate, getDayOfWeekName, isTimeRangeOverlap };

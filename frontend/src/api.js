@@ -125,8 +125,33 @@ export const createBooking = async (token, payload) => {
   return response.json();
 };
 
-export const fetchBookings = async (token) => {
-  const response = await fetch(`${API_BASE}/bookings`, {
+export const cancelBooking = async (token, id) => {
+  const response = await fetch(`${API_BASE}/bookings/${id}/cancel`, {
+    method: 'PUT',
+    headers: jsonHeaders(token)
+  });
+  return response.json();
+};
+
+export const confirmBooking = async (token, id) => {
+  const response = await fetch(`${API_BASE}/bookings/${id}/confirm`, {
+    method: 'PUT',
+    headers: jsonHeaders(token)
+  });
+  return response.json();
+};
+
+export const fetchBookings = async (token, query = {}) => {
+  const params = new URLSearchParams();
+  if (query.search) params.set('search', query.search);
+  if (query.status) params.set('status', query.status);
+  if (query.from_date) params.set('from_date', query.from_date);
+  if (query.to_date) params.set('to_date', query.to_date);
+  if (query.history_type) params.set('history_type', query.history_type);
+  if (query.page) params.set('page', query.page);
+  if (query.limit) params.set('limit', query.limit);
+
+  const response = await fetch(`${API_BASE}/bookings?${params.toString()}`, {
     headers: jsonHeaders(token)
   });
   return response.json();
@@ -177,5 +202,18 @@ export const verifyEmail = async (token) => {
     headers: jsonHeaders(),
     body: JSON.stringify({ token })
   });
+  return response.json();
+};
+
+export const fetchTimetable = async () => {
+  const response = await fetch(`${API_BASE}/timetable`);
+  return response.json();
+};
+
+export const fetchTimetableSlots = async ({ ground_id, date }) => {
+  const params = new URLSearchParams();
+  if (ground_id) params.set('ground_id', ground_id);
+  if (date) params.set('date', date);
+  const response = await fetch(`${API_BASE}/timetable/slots?${params.toString()}`);
   return response.json();
 };

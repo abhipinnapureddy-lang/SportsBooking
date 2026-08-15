@@ -7,6 +7,7 @@ const navigation = [
   { label: 'Book Venue', to: '/venues', icon: '⌖' },
   { label: 'Book Ground', to: '/grounds', icon: '✺' },
   { label: 'Book Equipment', to: '/equipment', icon: '◈' },
+  { label: 'Timetable', to: '/timetable', icon: '⏱' },
   { label: 'Inventory', to: '/inventory', icon: '⚒' },
   { label: 'Bookings', to: '/bookings', icon: '▤' },
   { label: 'Profile', to: '/profile', icon: '◉' },

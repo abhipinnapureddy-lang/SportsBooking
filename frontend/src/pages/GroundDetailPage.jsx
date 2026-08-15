@@ -1,23 +1,45 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
-import { fetchGroundDetails } from '../api.js';
+import { fetchGroundDetails, createBooking } from '../api.js';
+import SlotCard from '../components/booking/SlotCard.jsx';
+import BookingSummary from '../components/booking/BookingSummary.jsx';
 
 function GroundDetailPage() {
   const { id } = useParams();
   const { token, user } = useAuth();
   const [ground, setGround] = useState(null);
   const [slots, setSlots] = useState([]);
-  const [bookingMessage, setBookingMessage] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [selectedSlotId, setSelectedSlotId] = useState(null);
+
+  const loadGround = async () => {
+    const response = await fetchGroundDetails(id);
+    setGround(response.data?.ground || null);
+    setSlots(response.data?.slots || []);
+  };
 
   useEffect(() => {
-    const loadGround = async () => {
-      const response = await fetchGroundDetails(id);
-      setGround(response.data?.ground || null);
-      setSlots(response.data?.slots || []);
-    };
     loadGround();
   }, [id]);
+
+  const handleBooking = async (slotId) => {
+    if (!user) {
+      setError('Please log in to reserve a slot.');
+      return;
+    }
+    setMessage('');
+    setError('');
+    const result = await createBooking(token, { slot_id: slotId });
+    if (result.status !== 'success') {
+      setError(result.message || 'Unable to create booking.');
+      return;
+    }
+    setMessage('Slot booked successfully!');
+    setSelectedSlotId(null);
+    loadGround();
+  };
 
   if (!ground) {
     return <div className="card">Loading ground details…</div>;
@@ -33,6 +55,7 @@ function GroundDetailPage() {
         <p><strong>Status:</strong> {ground.status}</p>
       </div>
       <div>
+        <BookingSummary title="Available slots" value={slots.length} detail="Slots open for booking" />
         <div className="card">
           <h3>Slot availability</h3>
           {slots.length === 0 ? (
@@ -40,18 +63,28 @@ function GroundDetailPage() {
           ) : (
             <div className="card-list">
               {slots.map((slot) => (
-                <div key={slot.id} className="card card-sm">
-                  <p><strong>{new Date(slot.start_time).toLocaleString()}</strong> — {new Date(slot.end_time).toLocaleString()}</p>
-                  <p>{slot.status} · ₹{slot.price_per_hour}/hr</p>
-                </div>
+                <SlotCard
+                  key={slot.id}
+                  slot={slot}
+                  isSelected={selectedSlotId === slot.id}
+                  onSelect={setSelectedSlotId}
+                />
               ))}
             </div>
           )}
         </div>
         <div className="card">
           <h3>Booking note</h3>
-          <p>Use the booking form on the venue page once a slot and a court are available. Slot reservation integration is available through the `/api/slots` endpoint.</p>
-          {bookingMessage && <div className="alert">{bookingMessage}</div>}
+          <p>Choose an available slot below and confirm your reservation.</p>
+          {message && <div className="alert alert-success">{message}</div>}
+          {error && <div className="alert alert-error">{error}</div>}
+          {selectedSlotId ? (
+            <button className="button button-primary" onClick={() => handleBooking(selectedSlotId)}>
+              Book selected slot
+            </button>
+          ) : (
+            <p>Select an available slot to reserve it.</p>
+          )}
         </div>
       </div>
     </div>

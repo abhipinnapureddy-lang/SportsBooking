@@ -16,6 +16,7 @@ import SettingsPage from './pages/SettingsPage.jsx';
 import GroundsPage from './pages/GroundsPage.jsx';
 import GroundDetailPage from './pages/GroundDetailPage.jsx';
 import InventoryPage from './pages/InventoryPage.jsx';
+import TimetablePage from './pages/TimetablePage.jsx';
 import PageShell from './components/PageShell.jsx';
 import { useAuth } from './contexts/AuthContext.jsx';
 
@@ -48,6 +49,7 @@ function App() {
         <Route path="/bookings" element={<PrivateRoute><BookingsPage /></PrivateRoute>} />
         <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
         <Route path="/equipment" element={<PrivateRoute><EquipmentPage /></PrivateRoute>} />
+        <Route path="/timetable" element={<PrivateRoute><TimetablePage /></PrivateRoute>} />
         <Route path="/notifications" element={<PrivateRoute><NotificationsPage /></PrivateRoute>} />
         <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
         <Route path="*" element={<Navigate to="/" replace />} />

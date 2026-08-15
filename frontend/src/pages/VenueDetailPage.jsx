@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { fetchVenueDetails, createBooking } from '../api.js';
+import BookingForm from '../components/booking/BookingForm.jsx';
+import BookingSummary from '../components/booking/BookingSummary.jsx';
 
 function VenueDetailPage() {
   const { id } = useParams();
@@ -13,6 +15,7 @@ function VenueDetailPage() {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchVenue = async () => {
@@ -29,8 +32,18 @@ function VenueDetailPage() {
   const handleBooking = async (event) => {
     event.preventDefault();
     setMessage('');
+    setError('');
     if (!user) {
       navigate('/login');
+      return;
+    }
+
+    if (!selectedCourt) {
+      setError('Please select a court before booking.');
+      return;
+    }
+    if (!startTime || !endTime) {
+      setError('Please select a start and end time.');
       return;
     }
 
@@ -42,12 +55,12 @@ function VenueDetailPage() {
         end_time: endTime
       });
       if (result.status !== 'success') {
-        setMessage(result.message || 'Booking failed');
+        setError(result.message || 'Booking failed');
         return;
       }
       setMessage('Booking created successfully!');
     } catch (error) {
-      setMessage('Unable to create booking.');
+      setError('Unable to create booking.');
     }
   };
 
@@ -65,27 +78,19 @@ function VenueDetailPage() {
         <p><strong>Status:</strong> {venue.status}</p>
       </div>
       <div>
-        <div className="card">
-          <h3>Reserve a court</h3>
-          {message && <div className="alert">{message}</div>}
-          {courts.length === 0 ? (
-            <p>No courts available yet.</p>
-          ) : (
-            <form onSubmit={handleBooking}>
-              <label>Court</label>
-              <select value={selectedCourt || ''} onChange={(e) => setSelectedCourt(Number(e.target.value))}>
-                {courts.map((court) => (
-                  <option key={court.id} value={court.id}>{court.name} — {court.court_type}</option>
-                ))}
-              </select>
-              <label>Start time</label>
-              <input type="datetime-local" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-              <label>End time</label>
-              <input type="datetime-local" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-              <button type="submit" className="button">Confirm booking</button>
-            </form>
-          )}
-        </div>
+        <BookingSummary title="Available courts" value={courts.length} detail="Courts ready for reservation" />
+        <BookingForm
+          courts={courts}
+          selectedCourt={selectedCourt}
+          onCourtChange={setSelectedCourt}
+          startTime={startTime}
+          endTime={endTime}
+          onStartChange={setStartTime}
+          onEndChange={setEndTime}
+          onSubmit={handleBooking}
+          message={message}
+          error={error}
+        />
         <div className="card" style={{ marginTop: '1rem' }}>
           <h3>Court list</h3>
           {courts.map((court) => (
