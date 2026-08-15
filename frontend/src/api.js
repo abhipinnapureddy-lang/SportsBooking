@@ -44,4 +44,5 @@ export const createTournament = async (token, payload) => (await fetch(`${API_BA
 export const registerTournamentTeam = async (token, id, payload) => (await fetch(`${API_BASE}/tournaments/${id}/teams`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
 export const createTournamentMatch = async (token, id, payload) => (await fetch(`${API_BASE}/tournaments/${id}/matches`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
 export const updateTournamentMatch = async (token, id, matchId, payload) => (await fetch(`${API_BASE}/tournaments/${id}/matches/${matchId}`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
-export const issueTournamentCertificate = async (token, id, payload) => (await fetch(`${API_BASE}/tournaments/${id}/certificates`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
+export const askSportsAssistant = async (token, question) => (await fetch(`${API_BASE}/ai/assistant`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify({ question }) })).json();
+export const fetchAnalytics = async (token) => (await fetch(`${API_BASE}/analytics`, { headers: jsonHeaders(token) })).json();
