@@ -4,9 +4,12 @@ import { useAuth } from '../contexts/AuthContext.jsx';
 
 const navigation = [
   { label: 'Dashboard', to: '/dashboard', icon: '▦' },
+  { label: 'Sports', to: '/sports', icon: '🏅' },
   { label: 'Book Venue', to: '/venues', icon: '⌖' },
   { label: 'Book Ground', to: '/grounds', icon: '✺' },
   { label: 'Book Equipment', to: '/equipment', icon: '◈' },
+  { label: 'Tournaments', to: '/tournaments', icon: '🏆' },
+  { label: 'QR Desk', to: '/qr', icon: '▣' },
   { label: 'Timetable', to: '/timetable', icon: '⏱' },
   { label: 'Inventory', to: '/inventory', icon: '⚒' },
   { label: 'Bookings', to: '/bookings', icon: '▤' },
@@ -21,12 +24,10 @@ function PageShell({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [theme, setTheme] = useState(() => typeof window === 'undefined' ? 'light' : localStorage.getItem('sb-theme') || 'light');
-
   useEffect(() => { document.body.dataset.theme = theme; localStorage.setItem('sb-theme', theme); }, [theme]);
   const closeMenus = () => { setMobileMenuOpen(false); setUserMenuOpen(false); };
   const handleLogout = () => { logout(); closeMenus(); navigate('/login'); };
   const initials = (user?.name || 'Student').split(' ').map((part) => part[0]).slice(0, 2).join('').toUpperCase();
-
   return <div className="app-shell campus-shell">
     {mobileMenuOpen && <button className="nav-overlay" aria-label="Close navigation" onClick={closeMenus} />}
     <aside className={`sidebar campus-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
@@ -42,9 +43,7 @@ function PageShell({ children }) {
         <div className="topbar-title"><p className="eyebrow">Campus sports system</p><h1>Student portal</h1></div>
         <div className="topbar-actions">
           <button type="button" className="theme-toggle" onClick={() => setTheme((current) => current === 'dark' ? 'light' : 'dark')} aria-label="Toggle dark mode" title="Toggle dark mode">{theme === 'dark' ? '☀' : '◐'}</button>
-          {isAuthenticated ? <div className="user-menu"><button type="button" className="user-menu-trigger" onClick={() => setUserMenuOpen((open) => !open)} aria-haspopup="menu" aria-expanded={userMenuOpen}><span className="topbar-avatar">{initials}</span><span className="user-menu-name">{user?.name || 'Student'}</span><span aria-hidden="true">⌄</span></button>
-            {userMenuOpen && <div className="user-dropdown" role="menu"><div className="dropdown-user"><b>{user?.name || 'Student'}</b><span>{user?.email || 'Campus account'}</span></div><NavLink to="/profile" onClick={closeMenus} role="menuitem">View profile</NavLink><NavLink to="/settings" onClick={closeMenus} role="menuitem">Settings</NavLink><button type="button" onClick={handleLogout} role="menuitem">Log out</button></div>}
-          </div> : <NavLink className="button" to="/login">Sign in</NavLink>}
+          {isAuthenticated ? <div className="user-menu"><button type="button" className="user-menu-trigger" onClick={() => setUserMenuOpen((open) => !open)} aria-haspopup="menu" aria-expanded={userMenuOpen}><span className="topbar-avatar">{initials}</span><span className="user-menu-name">{user?.name || 'Student'}</span><span aria-hidden="true">⌄</span></button>{userMenuOpen && <div className="user-dropdown" role="menu"><div className="dropdown-user"><b>{user?.name || 'Student'}</b><span>{user?.email || 'Campus account'}</span></div><NavLink to="/profile" onClick={closeMenus} role="menuitem">View profile</NavLink><NavLink to="/settings" onClick={closeMenus} role="menuitem">Settings</NavLink><button type="button" onClick={handleLogout} role="menuitem">Log out</button></div>}</div> : <NavLink className="button" to="/login">Sign in</NavLink>}
         </div>
       </header>
       <main className="content"><div className="container">{children}</div></main>
