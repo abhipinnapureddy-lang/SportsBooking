@@ -1,162 +1,47 @@
 const API_BASE = '/api';
+const jsonHeaders = (token) => ({ 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) });
 
-const jsonHeaders = (token) => ({
-  'Content-Type': 'application/json',
-  ...(token ? { Authorization: `Bearer ${token}` } : {})
-});
-
-export const loginUser = async ({ email, password }) => {
-  const response = await fetch(`${API_BASE}/auth/login`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ email, password }) });
-  return response.json();
-};
-
-export const registerUser = async ({ name, email, password, phone }) => {
-  const response = await fetch(`${API_BASE}/auth/register`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ name, email, password, phone }) });
-  return response.json();
-};
-
-export const fetchVenues = async (search) => {
-  const params = new URLSearchParams();
-  if (search) params.set('search', search);
-  const response = await fetch(`${API_BASE}/venues?${params.toString()}`);
-  return response.json();
-};
-
-export const fetchVenueDetails = async (id) => {
-  const response = await fetch(`${API_BASE}/venues/${id}`);
-  return response.json();
-};
-
-export const fetchGrounds = async ({ search, sport_id, city, status } = {}) => {
-  const params = new URLSearchParams();
-  if (search) params.set('search', search);
-  if (sport_id) params.set('sport_id', sport_id);
-  if (city) params.set('city', city);
-  if (status) params.set('status', status);
-  const response = await fetch(`${API_BASE}/grounds?${params.toString()}`);
-  return response.json();
-};
-
-export const fetchGroundDetails = async (id) => {
-  const response = await fetch(`${API_BASE}/grounds/${id}`);
-  return response.json();
-};
-
-export const createGround = async (token, payload) => {
-  const response = await fetch(`${API_BASE}/grounds`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) });
-  return response.json();
-};
-
-export const updateGround = async (token, id, payload) => {
-  const response = await fetch(`${API_BASE}/grounds/${id}`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) });
-  return response.json();
-};
-
-export const deleteGround = async (token, id) => {
-  const response = await fetch(`${API_BASE}/grounds/${id}`, { method: 'DELETE', headers: jsonHeaders(token) });
-  return response.json();
-};
-
-export const fetchSlots = async ({ ground_id, date, status } = {}) => {
-  const params = new URLSearchParams();
-  if (ground_id) params.set('ground_id', ground_id);
-  if (date) params.set('date', date);
-  if (status) params.set('status', status);
-  const response = await fetch(`${API_BASE}/slots?${params.toString()}`);
-  return response.json();
-};
-
-export const fetchSlotDetails = async (id) => {
-  const response = await fetch(`${API_BASE}/slots/${id}`);
-  return response.json();
-};
-
-export const createSlot = async (token, payload) => {
-  const response = await fetch(`${API_BASE}/slots`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) });
-  return response.json();
-};
-
-export const updateSlot = async (token, id, payload) => {
-  const response = await fetch(`${API_BASE}/slots/${id}`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) });
-  return response.json();
-};
-
-export const deleteSlot = async (token, id) => {
-  const response = await fetch(`${API_BASE}/slots/${id}`, { method: 'DELETE', headers: jsonHeaders(token) });
-  return response.json();
-};
-
-export const createBooking = async (token, payload) => {
-  const response = await fetch(`${API_BASE}/bookings`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) });
-  return response.json();
-};
-
-export const cancelBooking = async (token, id) => {
-  const response = await fetch(`${API_BASE}/bookings/${id}/cancel`, { method: 'PUT', headers: jsonHeaders(token) });
-  return response.json();
-};
-
-export const confirmBooking = async (token, id) => {
-  const response = await fetch(`${API_BASE}/bookings/${id}/confirm`, { method: 'PUT', headers: jsonHeaders(token) });
-  return response.json();
-};
-
-export const fetchBookings = async (token, query = {}) => {
-  const params = new URLSearchParams();
-  if (query.search) params.set('search', query.search);
-  if (query.status) params.set('status', query.status);
-  if (query.from_date) params.set('from_date', query.from_date);
-  if (query.to_date) params.set('to_date', query.to_date);
-  if (query.history_type) params.set('history_type', query.history_type);
-  if (query.page) params.set('page', query.page);
-  if (query.limit) params.set('limit', query.limit);
-  const response = await fetch(`${API_BASE}/bookings?${params.toString()}`, { headers: jsonHeaders(token) });
-  return response.json();
-};
-
-export const fetchMyProfile = async (token) => {
-  const response = await fetch(`${API_BASE}/auth/me`, { headers: jsonHeaders(token) });
-  return response.json();
-};
-
-export const updateMyProfile = async (token, payload) => {
-  const response = await fetch(`${API_BASE}/users/me`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) });
-  return response.json();
-};
-
-export const changeMyPassword = async (token, payload) => {
-  const response = await fetch(`${API_BASE}/users/me/password`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) });
-  return response.json();
-};
-
-export const fetchEquipment = async (token) => (await fetch(`${API_BASE}/equipment`, { headers: jsonHeaders(token) })).json();
+export const loginUser = async ({ email, password }) => (await fetch(`${API_BASE}/auth/login`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ email, password }) })).json();
+export const registerUser = async ({ name, email, password, phone }) => (await fetch(`${API_BASE}/auth/register`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ name, email, password, phone }) })).json();
+export const fetchVenues = async (search) => { const p = new URLSearchParams(); if (search) p.set('search', search); return (await fetch(`${API_BASE}/venues?${p}`)).json(); };
+export const fetchVenueDetails = async (id) => (await fetch(`${API_BASE}/venues/${id}`)).json();
+export const fetchGrounds = async ({ search, sport_id, city, status } = {}) => { const p = new URLSearchParams(); if (search) p.set('search', search); if (sport_id) p.set('sport_id', sport_id); if (city) p.set('city', city); if (status) p.set('status', status); return (await fetch(`${API_BASE}/grounds?${p}`)).json(); };
+export const fetchGroundDetails = async (id) => (await fetch(`${API_BASE}/grounds/${id}`)).json();
+export const createGround = async (token, payload) => (await fetch(`${API_BASE}/grounds`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
+export const updateGround = async (token, id, payload) => (await fetch(`${API_BASE}/grounds/${id}`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
+export const deleteGround = async (token, id) => (await fetch(`${API_BASE}/grounds/${id}`, { method: 'DELETE', headers: jsonHeaders(token) })).json();
+export const fetchSlots = async ({ ground_id, date, status } = {}) => { const p = new URLSearchParams(); if (ground_id) p.set('ground_id', ground_id); if (date) p.set('date', date); if (status) p.set('status', status); return (await fetch(`${API_BASE}/slots?${p}`)).json(); };
+export const fetchSlotDetails = async (id) => (await fetch(`${API_BASE}/slots/${id}`)).json();
+export const createSlot = async (token, payload) => (await fetch(`${API_BASE}/slots`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
+export const updateSlot = async (token, id, payload) => (await fetch(`${API_BASE}/slots/${id}`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
+export const deleteSlot = async (token, id) => (await fetch(`${API_BASE}/slots/${id}`, { method: 'DELETE', headers: jsonHeaders(token) })).json();
+export const createBooking = async (token, payload) => (await fetch(`${API_BASE}/bookings`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
+export const cancelBooking = async (token, id) => (await fetch(`${API_BASE}/bookings/${id}/cancel`, { method: 'PUT', headers: jsonHeaders(token) })).json();
+export const confirmBooking = async (token, id) => (await fetch(`${API_BASE}/bookings/${id}/confirm`, { method: 'PUT', headers: jsonHeaders(token) })).json();
+export const fetchBookings = async (token, query = {}) => { const p = new URLSearchParams(); Object.entries(query).forEach(([k,v]) => { if (v !== undefined && v !== '') p.set(k, v); }); return (await fetch(`${API_BASE}/bookings?${p}`, { headers: jsonHeaders(token) })).json(); };
+export const fetchMyProfile = async (token) => (await fetch(`${API_BASE}/auth/me`, { headers: jsonHeaders(token) })).json();
+export const updateMyProfile = async (token, payload) => (await fetch(`${API_BASE}/users/me`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
+export const changeMyPassword = async (token, payload) => (await fetch(`${API_BASE}/users/me/password`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
+export const fetchEquipment = async (token, query = {}) => { const p = new URLSearchParams(); Object.entries(query).forEach(([k,v]) => { if (v) p.set(k,v); }); return (await fetch(`${API_BASE}/equipment?${p}`, { headers: jsonHeaders(token) })).json(); };
 export const fetchEquipmentReservations = async (token) => (await fetch(`${API_BASE}/equipment/reservations`, { headers: jsonHeaders(token) })).json();
 export const reserveEquipment = async (token, payload) => (await fetch(`${API_BASE}/equipment/reservations`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
 export const cancelEquipmentReservation = async (token, id) => (await fetch(`${API_BASE}/equipment/reservations/${id}/cancel`, { method: 'PUT', headers: jsonHeaders(token) })).json();
-
+export const equipmentQrAction = async (token, payload) => (await fetch(`${API_BASE}/equipment/qr-action`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
 export const fetchInventory = async (token) => (await fetch(`${API_BASE}/inventory`, { headers: jsonHeaders(token) })).json();
 export const createInventoryEntry = async (token, payload) => (await fetch(`${API_BASE}/inventory`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
-
 export const fetchNotifications = async (token) => (await fetch(`${API_BASE}/notifications`, { headers: jsonHeaders(token) })).json();
 export const markNotificationRead = async (token, id) => (await fetch(`${API_BASE}/notifications/${id}/read`, { method: 'PUT', headers: jsonHeaders(token) })).json();
 export const markAllNotificationsRead = async (token) => (await fetch(`${API_BASE}/notifications/read-all`, { method: 'PUT', headers: jsonHeaders(token) })).json();
 export const fetchSettings = async (token) => (await fetch(`${API_BASE}/settings`, { headers: jsonHeaders(token) })).json();
 export const saveSettings = async (token, payload) => (await fetch(`${API_BASE}/settings`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
-
-export const verifyEmail = async (token) => {
-  const response = await fetch(`${API_BASE}/auth/verify-email`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ token }) });
-  return response.json();
-};
-
-export const fetchTimetable = async (token) => {
-  const response = await fetch(`${API_BASE}/timetable`, { headers: jsonHeaders(token) });
-  return response.json();
-};
-
-export const fetchTimetableSlots = async (token, { ground_id, date }) => {
-  const params = new URLSearchParams();
-  if (ground_id) params.set('ground_id', ground_id);
-  if (date) params.set('date', date);
-  const response = await fetch(`${API_BASE}/timetable/slots?${params.toString()}`, { headers: jsonHeaders(token) });
-  return response.json();
-};
+export const verifyEmail = async (token) => (await fetch(`${API_BASE}/auth/verify-email`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ token }) })).json();
+export const fetchTimetable = async (token) => (await fetch(`${API_BASE}/timetable`, { headers: jsonHeaders(token) })).json();
+export const fetchTimetableSlots = async (token, { ground_id, date }) => { const p = new URLSearchParams(); if (ground_id) p.set('ground_id', ground_id); if (date) p.set('date', date); return (await fetch(`${API_BASE}/timetable/slots?${p}`, { headers: jsonHeaders(token) })).json(); };
+export const fetchSports = async (search = '') => { const p = new URLSearchParams(); if (search) p.set('search', search); return (await fetch(`${API_BASE}/sports?${p}`)).json(); };
+export const fetchSport = async (id) => (await fetch(`${API_BASE}/sports/${id}`)).json();
+export const fetchTournaments = async (token) => (await fetch(`${API_BASE}/tournaments`, { headers: jsonHeaders(token) })).json();
+export const fetchTournament = async (token, id) => (await fetch(`${API_BASE}/tournaments/${id}`, { headers: jsonHeaders(token) })).json();
+export const createTournament = async (token, payload) => (await fetch(`${API_BASE}/tournaments`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
+export const registerTournamentTeam = async (token, id, payload) => (await fetch(`${API_BASE}/tournaments/${id}/teams`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
+export const createTournamentMatch = async (token, id, payload) => (await fetch(`${API_BASE}/tournaments/${id}/matches`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
+export const updateTournamentMatch = async (token, id, matchId, payload) => (await fetch(`${API_BASE}/tournaments/${id}/matches/${matchId}`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
