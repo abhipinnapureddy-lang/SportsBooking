@@ -31,6 +31,8 @@ initializeDb()
     const sportsRoutes = require("./routes/sportsRoutes");
     const studentsRoutes = require("./routes/studentsRoutes");
     const tournamentRoutes = require("./routes/tournamentRoutes");
+    const aiRoutes = require("./routes/aiRoutes");
+    const analyticsRoutes = require("./routes/analyticsRoutes");
 
     app.use("/api/auth", authRoutes);
     app.use("/api/venues", venueRoutes);
@@ -47,6 +49,8 @@ initializeDb()
     app.use("/api/sports", sportsRoutes);
     app.use("/api/students", studentsRoutes);
     app.use("/api/tournaments", tournamentRoutes);
+    app.use("/api/ai", aiRoutes);
+    app.use("/api/analytics", analyticsRoutes);
 
     if (process.env.NODE_ENV === "production") {
       const frontendDist = path.join(__dirname, "frontend", "dist");
