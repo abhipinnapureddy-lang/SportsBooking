@@ -13,6 +13,9 @@ const PORT = process.env.PORT || 5000;
 
 initializeDb()
   .then(async () => {
+    const { runCompatibilityMigration } = require("./database/compatibilityMigration");
+    await runCompatibilityMigration();
+
     const { runMember4Migration } = require("./database/member4Migration");
     await runMember4Migration();
 
