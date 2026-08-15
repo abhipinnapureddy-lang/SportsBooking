@@ -19,6 +19,12 @@ initializeDb()
     const { runMember4Migration } = require("./database/member4Migration");
     await runMember4Migration();
 
+    // Seed the supplied CBIT III-Semester class timetable only for student accounts
+    // that do not already have a personal timetable. Existing personal timetables
+    // remain untouched.
+    const { runClassTimetableMigration } = require("./database/classTimetableMigration");
+    await runClassTimetableMigration();
+
     const authRoutes = require("./routes/authRoutes");
     const venueRoutes = require("./routes/venueRoutes");
     const courtRoutes = require("./routes/courtRoutes");
