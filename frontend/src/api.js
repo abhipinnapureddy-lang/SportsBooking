@@ -6,20 +6,12 @@ const jsonHeaders = (token) => ({
 });
 
 export const loginUser = async ({ email, password }) => {
-  const response = await fetch(`${API_BASE}/auth/login`, {
-    method: 'POST',
-    headers: jsonHeaders(),
-    body: JSON.stringify({ email, password })
-  });
+  const response = await fetch(`${API_BASE}/auth/login`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ email, password }) });
   return response.json();
 };
 
 export const registerUser = async ({ name, email, password, phone }) => {
-  const response = await fetch(`${API_BASE}/auth/register`, {
-    method: 'POST',
-    headers: jsonHeaders(),
-    body: JSON.stringify({ name, email, password, phone })
-  });
+  const response = await fetch(`${API_BASE}/auth/register`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ name, email, password, phone }) });
   return response.json();
 };
 
@@ -51,28 +43,17 @@ export const fetchGroundDetails = async (id) => {
 };
 
 export const createGround = async (token, payload) => {
-  const response = await fetch(`${API_BASE}/grounds`, {
-    method: 'POST',
-    headers: jsonHeaders(token),
-    body: JSON.stringify(payload)
-  });
+  const response = await fetch(`${API_BASE}/grounds`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) });
   return response.json();
 };
 
 export const updateGround = async (token, id, payload) => {
-  const response = await fetch(`${API_BASE}/grounds/${id}`, {
-    method: 'PUT',
-    headers: jsonHeaders(token),
-    body: JSON.stringify(payload)
-  });
+  const response = await fetch(`${API_BASE}/grounds/${id}`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) });
   return response.json();
 };
 
 export const deleteGround = async (token, id) => {
-  const response = await fetch(`${API_BASE}/grounds/${id}`, {
-    method: 'DELETE',
-    headers: jsonHeaders(token)
-  });
+  const response = await fetch(`${API_BASE}/grounds/${id}`, { method: 'DELETE', headers: jsonHeaders(token) });
   return response.json();
 };
 
@@ -91,53 +72,32 @@ export const fetchSlotDetails = async (id) => {
 };
 
 export const createSlot = async (token, payload) => {
-  const response = await fetch(`${API_BASE}/slots`, {
-    method: 'POST',
-    headers: jsonHeaders(token),
-    body: JSON.stringify(payload)
-  });
+  const response = await fetch(`${API_BASE}/slots`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) });
   return response.json();
 };
 
 export const updateSlot = async (token, id, payload) => {
-  const response = await fetch(`${API_BASE}/slots/${id}`, {
-    method: 'PUT',
-    headers: jsonHeaders(token),
-    body: JSON.stringify(payload)
-  });
+  const response = await fetch(`${API_BASE}/slots/${id}`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) });
   return response.json();
 };
 
 export const deleteSlot = async (token, id) => {
-  const response = await fetch(`${API_BASE}/slots/${id}`, {
-    method: 'DELETE',
-    headers: jsonHeaders(token)
-  });
+  const response = await fetch(`${API_BASE}/slots/${id}`, { method: 'DELETE', headers: jsonHeaders(token) });
   return response.json();
 };
 
 export const createBooking = async (token, payload) => {
-  const response = await fetch(`${API_BASE}/bookings`, {
-    method: 'POST',
-    headers: jsonHeaders(token),
-    body: JSON.stringify(payload)
-  });
+  const response = await fetch(`${API_BASE}/bookings`, { method: 'POST', headers: jsonHeaders(token), body: JSON.stringify(payload) });
   return response.json();
 };
 
 export const cancelBooking = async (token, id) => {
-  const response = await fetch(`${API_BASE}/bookings/${id}/cancel`, {
-    method: 'PUT',
-    headers: jsonHeaders(token)
-  });
+  const response = await fetch(`${API_BASE}/bookings/${id}/cancel`, { method: 'PUT', headers: jsonHeaders(token) });
   return response.json();
 };
 
 export const confirmBooking = async (token, id) => {
-  const response = await fetch(`${API_BASE}/bookings/${id}/confirm`, {
-    method: 'PUT',
-    headers: jsonHeaders(token)
-  });
+  const response = await fetch(`${API_BASE}/bookings/${id}/confirm`, { method: 'PUT', headers: jsonHeaders(token) });
   return response.json();
 };
 
@@ -150,35 +110,22 @@ export const fetchBookings = async (token, query = {}) => {
   if (query.history_type) params.set('history_type', query.history_type);
   if (query.page) params.set('page', query.page);
   if (query.limit) params.set('limit', query.limit);
-
-  const response = await fetch(`${API_BASE}/bookings?${params.toString()}`, {
-    headers: jsonHeaders(token)
-  });
+  const response = await fetch(`${API_BASE}/bookings?${params.toString()}`, { headers: jsonHeaders(token) });
   return response.json();
 };
 
 export const fetchMyProfile = async (token) => {
-  const response = await fetch(`${API_BASE}/auth/me`, {
-    headers: jsonHeaders(token)
-  });
+  const response = await fetch(`${API_BASE}/auth/me`, { headers: jsonHeaders(token) });
   return response.json();
 };
 
 export const updateMyProfile = async (token, payload) => {
-  const response = await fetch(`${API_BASE}/users/me`, {
-    method: 'PUT',
-    headers: jsonHeaders(token),
-    body: JSON.stringify(payload)
-  });
+  const response = await fetch(`${API_BASE}/users/me`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) });
   return response.json();
 };
 
 export const changeMyPassword = async (token, payload) => {
-  const response = await fetch(`${API_BASE}/users/me/password`, {
-    method: 'PUT',
-    headers: jsonHeaders(token),
-    body: JSON.stringify(payload)
-  });
+  const response = await fetch(`${API_BASE}/users/me/password`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) });
   return response.json();
 };
 
@@ -197,23 +144,19 @@ export const fetchSettings = async (token) => (await fetch(`${API_BASE}/settings
 export const saveSettings = async (token, payload) => (await fetch(`${API_BASE}/settings`, { method: 'PUT', headers: jsonHeaders(token), body: JSON.stringify(payload) })).json();
 
 export const verifyEmail = async (token) => {
-  const response = await fetch(`${API_BASE}/auth/verify-email`, {
-    method: 'POST',
-    headers: jsonHeaders(),
-    body: JSON.stringify({ token })
-  });
+  const response = await fetch(`${API_BASE}/auth/verify-email`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ token }) });
   return response.json();
 };
 
-export const fetchTimetable = async () => {
-  const response = await fetch(`${API_BASE}/timetable`);
+export const fetchTimetable = async (token) => {
+  const response = await fetch(`${API_BASE}/timetable`, { headers: jsonHeaders(token) });
   return response.json();
 };
 
-export const fetchTimetableSlots = async ({ ground_id, date }) => {
+export const fetchTimetableSlots = async (token, { ground_id, date }) => {
   const params = new URLSearchParams();
   if (ground_id) params.set('ground_id', ground_id);
   if (date) params.set('date', date);
-  const response = await fetch(`${API_BASE}/timetable/slots?${params.toString()}`);
+  const response = await fetch(`${API_BASE}/timetable/slots?${params.toString()}`, { headers: jsonHeaders(token) });
   return response.json();
 };
